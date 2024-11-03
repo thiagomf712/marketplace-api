@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const envSchema = z.object({
   CORS_ORIGIN: z.string().url(),
+  DATABASE_URL: z.string().url(),
   JWT_EXPIRES_IN_SECONDS: z.coerce
     .number()
     .optional()

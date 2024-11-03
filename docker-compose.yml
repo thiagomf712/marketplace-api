@@ -1,0 +1,17 @@
+services:
+  postgres:
+    container_name: marketplace-api-pg
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: marketplace-api
+      PGDATA: /data/postgres
+    volumes:
+      - pg_data:/data/postgres
+
+volumes:
+  pg_data:
+    name: marketplace-api-pg-data

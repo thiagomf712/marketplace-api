@@ -28,13 +28,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   private static extractJwtFromCookie(request: Request) {
+    const cookieKey = 'access-token'
+
     if (
       request.cookies &&
-      'accessToken' in request.cookies &&
-      typeof request.cookies['accessToken'] === 'string' &&
-      request.cookies['accessToken'].length > 0
+      cookieKey in request.cookies &&
+      typeof request.cookies[cookieKey] === 'string' &&
+      request.cookies[cookieKey].length > 0
     ) {
-      return request.cookies['accessToken']
+      return request.cookies[cookieKey]
     }
 
     return null

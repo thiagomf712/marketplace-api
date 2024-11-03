@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { randomUUID } from 'crypto'
-import { Response } from 'express'
+import { type Response } from 'express'
 import { z } from 'zod'
 
 import { Public } from '@/infra/auth/public'
@@ -18,8 +18,8 @@ const authenticateBodyPipe = new ZodValidationPipe(authenticateBodySchema)
 
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 
-@Controller('sellers/sessions')
 @Public()
+@Controller('sellers/sessions')
 export class AuthenticateController {
   constructor(
     private jwtService: JwtService,

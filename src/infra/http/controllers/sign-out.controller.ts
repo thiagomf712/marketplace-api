@@ -1,5 +1,5 @@
 import { Controller, Post, Res } from '@nestjs/common'
-import { Response } from 'express'
+import { type Response } from 'express'
 
 @Controller('sign-out')
 export class SignOutController {

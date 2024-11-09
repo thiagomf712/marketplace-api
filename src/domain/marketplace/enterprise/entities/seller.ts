@@ -1,12 +1,17 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+
+import { Attachment } from './attachment'
 
 export interface SellerProps {
   name: string
   email: string
   phone: string
   password: string
-  avatarId: string
+  avatarId: UniqueEntityID
+
+  avatar: Attachment | null
 }
 
 export class Seller extends Entity<SellerProps> {
@@ -30,8 +35,18 @@ export class Seller extends Entity<SellerProps> {
     return this.props.avatarId
   }
 
-  static create(props: SellerProps, id?: UniqueEntityID) {
-    const seller = new Seller(props, id)
+  get avatar() {
+    return this.props.avatar
+  }
+
+  static create(props: Optional<SellerProps, 'avatar'>, id?: UniqueEntityID) {
+    const seller = new Seller(
+      {
+        ...props,
+        avatar: props.avatar ?? null,
+      },
+      id,
+    )
 
     return seller
   }

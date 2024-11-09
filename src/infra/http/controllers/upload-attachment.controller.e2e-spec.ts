@@ -36,11 +36,16 @@ describe('Upload attachment (E2E)', () => {
     const response = await request(app.getHttpServer())
       .post('/attachments')
       .attach('files', './test/e2e/sample-upload.png')
+      .attach('files', './test/e2e/sample-upload.png')
 
     expect(response.statusCode).toBe(201)
 
     expect(response.body).toEqual({
       attachments: expect.arrayContaining([
+        {
+          id: expect.any(String),
+          url: expect.stringContaining('-sample-upload.png'),
+        },
         {
           id: expect.any(String),
           url: expect.stringContaining('-sample-upload.png'),

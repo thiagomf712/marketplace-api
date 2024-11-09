@@ -7,16 +7,22 @@ import { AttachmentsRepository } from '../repositories/attachments-repository'
 import { Uploader } from '../storage/uploader'
 import { InvalidAttachmentTypeError } from './errors/invalid-attachment-type-error'
 
-interface UploadAttachmentsRequest {
+interface UploadAttachmentBody {
   fileName: string
   fileType: string
   body: Buffer
 }
 
+interface UploadAttachmentsRequest {
+  attachments: UploadAttachmentBody[]
+}
+
 type UploadAttachmentsResponse = Either<
   InvalidAttachmentTypeError,
-  { attachment: Attachment }
+  { attachments: Attachment[] }
 >
+
+type SaveAttachmentResponse = Either<InvalidAttachmentTypeError, Attachment>
 
 @Injectable()
 export class UploadAttachmentUseCase {
@@ -25,11 +31,11 @@ export class UploadAttachmentUseCase {
     private uploader: Uploader,
   ) {}
 
-  async execute({
-    fileName,
+  async saveAttachment({
     body,
+    fileName,
     fileType,
-  }: UploadAttachmentsRequest): Promise<UploadAttachmentsResponse> {
+  }: UploadAttachmentBody): Promise<SaveAttachmentResponse> {
     if (!/^(image\/(jpeg|png))$/.test(fileType)) {
       return left(new InvalidAttachmentTypeError(fileType))
     }
@@ -42,8 +48,29 @@ export class UploadAttachmentUseCase {
 
     await this.attachmentsRepository.create(attachment)
 
+    return right(attachment)
+  }
+
+  async execute({
+    attachments,
+  }: UploadAttachmentsRequest): Promise<UploadAttachmentsResponse> {
+    // should add an transaction here
+    const attachmentsResult = await Promise.all(
+      attachments.map((attachment) => this.saveAttachment(attachment)),
+    )
+
+    const invalidAttachment = attachmentsResult.find((result) =>
+      result.isLeft(),
+    )
+
+    if (invalidAttachment) {
+      return left(invalidAttachment.value)
+    }
+
     return right({
-      attachment,
+      attachments: attachmentsResult.map(
+        (result) => result.value as Attachment,
+      ),
     })
   }
 }

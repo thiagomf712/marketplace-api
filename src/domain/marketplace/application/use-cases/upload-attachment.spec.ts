@@ -20,33 +20,54 @@ describe('Upload and create attachment', () => {
     )
   })
 
-  it('should be able to upload an attachment', async () => {
+  it('should be able to upload attachments', async () => {
     const result = await sut.execute({
-      fileName: 'profile.png',
-      fileType: 'image/png',
-      body: Buffer.from(''),
+      attachments: [
+        {
+          fileName: 'profile.png',
+          fileType: 'image/png',
+          body: Buffer.from(''),
+        },
+        {
+          fileName: 'profile2.jpg',
+          fileType: 'image/jpeg',
+          body: Buffer.from(''),
+        },
+      ],
     })
 
     expect(result.isRight()).toBe(true)
 
     expect(result.value).toEqual({
-      attachment: inMemoryAttachmentsRepository.items[0],
+      attachments: expect.arrayContaining([
+        inMemoryAttachmentsRepository.items[0],
+        inMemoryAttachmentsRepository.items[1],
+      ]),
     })
 
-    expect(fakeUploader.uploads).toHaveLength(1)
+    expect(fakeUploader.uploads).toHaveLength(2)
 
-    expect(fakeUploader.uploads[0]).toEqual(
-      expect.objectContaining({
-        fileName: 'profile.png',
-      }),
+    expect(fakeUploader.uploads).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fileName: 'profile.png',
+        }),
+        expect.objectContaining({
+          fileName: 'profile2.jpg',
+        }),
+      ]),
     )
   })
 
   it('should not be able to upload an attachment with invalid file type', async () => {
     const result = await sut.execute({
-      fileName: 'profile.mp3',
-      fileType: 'audio/mpeg',
-      body: Buffer.from(''),
+      attachments: [
+        {
+          fileName: 'profile.mp3',
+          fileType: 'audio/mpeg',
+          body: Buffer.from(''),
+        },
+      ],
     })
 
     expect(result.isLeft()).toBe(true)

@@ -38,12 +38,12 @@ export class UploadAttachmentController {
     )
     files: Express.Multer.File[],
   ) {
-    const file = files[0]
-
     const result = await this.uploadAttachmentUseCase.execute({
-      fileName: file.originalname,
-      fileType: file.mimetype,
-      body: file.buffer,
+      attachments: files.map((file) => ({
+        fileName: file.originalname,
+        fileType: file.mimetype,
+        body: file.buffer,
+      })),
     })
 
     if (result.isLeft()) {
@@ -58,10 +58,10 @@ export class UploadAttachmentController {
       }
     }
 
-    const { attachment } = result.value
+    const { attachments } = result.value
 
     return {
-      attachments: [AttachmentPresenter.toHTTP(attachment)],
+      attachments: attachments.map(AttachmentPresenter.toHTTP),
     }
   }
 }

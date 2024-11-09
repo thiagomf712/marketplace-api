@@ -10,5 +10,7 @@ export abstract class SellersRepository {
     params: FindSellerByEmailOrPhoneParams,
   ): Promise<Seller | null>
 
+  abstract findByEmail(email: string): Promise<Seller | null>
+
   abstract create(seller: Seller): Promise<void>
 }

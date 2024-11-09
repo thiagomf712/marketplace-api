@@ -1,9 +1,16 @@
-import { Body, Controller, Post, Res } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
-import { randomUUID } from 'crypto'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  ForbiddenException,
+  Post,
+  Res,
+} from '@nestjs/common'
 import { type Response } from 'express'
 import { z } from 'zod'
 
+import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
+import { WrongCredentialsError } from '@/domain/marketplace/application/use-cases/errors/wrong-credentials-error'
 import { Public } from '@/infra/auth/public'
 import { EnvService } from '@/infra/env/env.service'
 
@@ -22,7 +29,7 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 @Controller('sellers/sessions')
 export class AuthenticateController {
   constructor(
-    private jwtService: JwtService,
+    private authenticateSeller: AuthenticateSellerUseCase,
     private envService: EnvService,
   ) {}
 
@@ -33,9 +40,24 @@ export class AuthenticateController {
   ) {
     const { email, password } = body
 
-    const accessToken = await this.jwtService.signAsync({
-      sub: randomUUID(),
+    const result = await this.authenticateSeller.execute({
+      email,
+      password,
     })
+
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case WrongCredentialsError:
+          throw new ForbiddenException(error.message)
+
+        default:
+          throw new BadRequestException(error.message)
+      }
+    }
+
+    const { accessToken } = result.value
 
     const expiresInSeconds = this.envService.get('JWT_EXPIRES_IN_SECONDS')
 

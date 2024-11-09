@@ -2,8 +2,8 @@
   - [x] Deve ser feito o hash da senha do usuário
   - [x] Não deve ser possível cadastrar usuário com e-mail duplicado
   - [x] Não deve ser possível cadastrar usuário com telefone duplicado
-- [ ] Deve ser possível obter o token de autenticação
-  - [ ] Não deve ser possível se autenticar com credenciais incorretas
+- [x] Deve ser possível obter o token de autenticação
+  - [x] Não deve ser possível se autenticar com credenciais incorretas
 - [x] Deve ser possível realizar o upload de arquivos
 - [ ] Deve ser possível criar e editar um Produto
   - [ ] Deve ser possível armazenar o valor do produto em centavos

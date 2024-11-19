@@ -18,6 +18,9 @@ export class PrismaSellersRepository implements SellersRepository {
       where: {
         id,
       },
+      include: {
+        attachment: true,
+      },
     })
 
     if (!seller) {

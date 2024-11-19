@@ -10,6 +10,25 @@ import { PrismaService } from '../prisma.service'
 export class PrismaProductsRepository implements ProductsRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findById(id: string): Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        attachments: true,
+        category: true,
+        owner: { include: { attachment: true } },
+      },
+    })
+
+    if (!product) {
+      return null
+    }
+
+    return PrismaProductMapper.toDomain(product)
+  }
+
   async create(product: Product): Promise<void> {
     const data = PrismaProductMapper.toPrisma(
       product,
@@ -17,6 +36,23 @@ export class PrismaProductsRepository implements ProductsRepository {
     )
 
     await this.prisma.product.create({
+      data,
+      include: {
+        attachments: true,
+      },
+    })
+  }
+
+  async save(product: Product): Promise<void> {
+    const data = PrismaProductMapper.toPrisma(
+      product,
+      product.attachments.getItems(),
+    )
+
+    await this.prisma.product.update({
+      where: {
+        id: product.id.toString(),
+      },
       data,
       include: {
         attachments: true,

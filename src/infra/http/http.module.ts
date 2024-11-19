@@ -4,6 +4,7 @@ import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-
 import { CreateProductUseCase } from '@/domain/marketplace/application/use-cases/create-product'
 import { FetchCategoriesUseCase } from '@/domain/marketplace/application/use-cases/fetch-categories'
 import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
+import { UpdateProductUseCase } from '@/domain/marketplace/application/use-cases/update-product'
 import { UploadAttachmentUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
 
 import { CryptographyModule } from '../cryptography/cryptography.module'
@@ -16,6 +17,7 @@ import { CreateSellerController } from './controllers/create-seller.controller'
 import { FetchCategoriesController } from './controllers/fetch-categories.controller'
 import { GetAttachmentByUrlController } from './controllers/get-attachment-by-url.controller'
 import { SignOutController } from './controllers/sign-out.controller'
+import { UpdateProductController } from './controllers/update-product.controller'
 import { UploadAttachmentController } from './controllers/upload-attachment.controller'
 
 @Module({
@@ -28,6 +30,7 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     CreateSellerController,
     FetchCategoriesController,
     CreateProductController,
+    UpdateProductController,
   ],
   providers: [
     UploadAttachmentUseCase,
@@ -35,6 +38,7 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     AuthenticateSellerUseCase,
     FetchCategoriesUseCase,
     CreateProductUseCase,
+    UpdateProductUseCase,
   ],
 })
 export class HttpModule {}

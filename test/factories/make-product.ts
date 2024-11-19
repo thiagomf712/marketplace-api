@@ -18,15 +18,17 @@ export function makeProduct(
 ) {
   const category = override.category ?? makeCategory()
 
+  const owner = override.owner ?? null
+
   const product = Product.create(
     {
       title: faker.lorem.words({ min: 1, max: 3 }),
       description: faker.lorem.sentences(),
       priceInCents: faker.number.int({ min: 100, max: 10000 }),
       status: faker.helpers.enumValue(ProductStatus),
-      categoryId: override.categoryId ?? category.id,
+      categoryId: category.id ?? new UniqueEntityID(),
       category,
-      ownerId: new UniqueEntityID(),
+      ownerId: owner?.id ?? new UniqueEntityID(),
       ...override,
     },
     id,

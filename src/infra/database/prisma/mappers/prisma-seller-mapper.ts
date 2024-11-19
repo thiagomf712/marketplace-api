@@ -1,10 +1,16 @@
-import { Prisma, User as PrismaUser } from '@prisma/client'
+import {
+  Attachment as PrismaAttachment,
+  Prisma,
+  User as PrismaUser,
+} from '@prisma/client'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
 
+import { PrismaAttachmentMapper } from './prisma-attachment-mapper'
+
 export class PrismaSellerMapper {
-  static toDomain(raw: PrismaUser): Seller {
+  static toDomain(raw: PrismaUser & { attachment?: PrismaAttachment }): Seller {
     return Seller.create(
       {
         name: raw.name,
@@ -12,6 +18,9 @@ export class PrismaSellerMapper {
         password: raw.password,
         phone: raw.phone,
         avatarId: new UniqueEntityID(raw.avatarId),
+        avatar: raw.attachment
+          ? PrismaAttachmentMapper.toDomain(raw.attachment)
+          : null,
       },
       new UniqueEntityID(raw.id),
     )

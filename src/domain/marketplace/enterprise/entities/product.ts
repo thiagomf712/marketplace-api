@@ -32,8 +32,20 @@ export class Product extends AggregateRoot<ProductProps> {
     return this.props.title
   }
 
+  set title(title: string) {
+    this.props.title = title
+
+    this.touch()
+  }
+
   get description() {
     return this.props.description
+  }
+
+  set description(description: string) {
+    this.props.description = description
+
+    this.touch()
   }
 
   get status() {
@@ -42,6 +54,12 @@ export class Product extends AggregateRoot<ProductProps> {
 
   get priceInCents() {
     return this.props.priceInCents
+  }
+
+  set priceInCents(priceInCents: number) {
+    this.props.priceInCents = priceInCents
+
+    this.touch()
   }
 
   get categoryId() {
@@ -56,8 +74,22 @@ export class Product extends AggregateRoot<ProductProps> {
     return this.props.attachments
   }
 
+  set attachments(attachments: ProductAttachmentList) {
+    this.props.attachments = attachments
+
+    this.touch()
+  }
+
   get category() {
     return this.props.category
+  }
+
+  set category(category: Category) {
+    this.props.category = category
+
+    this.props.categoryId = category.id
+
+    this.touch()
   }
 
   get owner() {
@@ -74,12 +106,6 @@ export class Product extends AggregateRoot<ProductProps> {
 
   private touch() {
     this.props.updatedAt = new Date()
-  }
-
-  set attachments(attachments: ProductAttachmentList) {
-    this.props.attachments = attachments
-
-    this.touch()
   }
 
   static create(

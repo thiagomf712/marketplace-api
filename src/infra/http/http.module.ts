@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 
 import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
+import { CreateProductUseCase } from '@/domain/marketplace/application/use-cases/create-product'
 import { FetchCategoriesUseCase } from '@/domain/marketplace/application/use-cases/fetch-categories'
 import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
 import { UploadAttachmentUseCase } from '@/domain/marketplace/application/use-cases/upload-attachments'
@@ -10,6 +11,7 @@ import { DatabaseModule } from '../database/database.module'
 import { EnvModule } from '../env/env.module'
 import { StorageModule } from '../storage/storage.module'
 import { AuthenticateController } from './controllers/authenticate.controller'
+import { CreateProductController } from './controllers/create-product.controller'
 import { CreateSellerController } from './controllers/create-seller.controller'
 import { FetchCategoriesController } from './controllers/fetch-categories.controller'
 import { GetAttachmentByUrlController } from './controllers/get-attachment-by-url.controller'
@@ -25,12 +27,14 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     GetAttachmentByUrlController,
     CreateSellerController,
     FetchCategoriesController,
+    CreateProductController,
   ],
   providers: [
     UploadAttachmentUseCase,
     RegisterSellerUseCase,
     AuthenticateSellerUseCase,
     FetchCategoriesUseCase,
+    CreateProductUseCase,
   ],
 })
 export class HttpModule {}

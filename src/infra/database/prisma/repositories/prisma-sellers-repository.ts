@@ -13,6 +13,20 @@ import { PrismaService } from '../prisma.service'
 export class PrismaSellersRepository implements SellersRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findById(id: string): Promise<Seller | null> {
+    const seller = await this.prisma.user.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    if (!seller) {
+      return null
+    }
+
+    return PrismaSellerMapper.toDomain(seller)
+  }
+
   async findByEmail(email: string): Promise<Seller | null> {
     const seller = await this.prisma.user.findFirst({
       where: {

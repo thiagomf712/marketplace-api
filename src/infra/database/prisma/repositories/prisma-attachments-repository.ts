@@ -10,6 +10,18 @@ import { PrismaService } from '../prisma.service'
 export class PrismaAttachmentsRepository implements AttachmentsRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findManyByIds(ids: string[]): Promise<Attachment[]> {
+    const attachments = await this.prisma.attachment.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    })
+
+    return attachments.map(PrismaAttachmentMapper.toDomain)
+  }
+
   async findById(id: string): Promise<Attachment | null> {
     const attachment = await this.prisma.attachment.findUnique({
       where: {

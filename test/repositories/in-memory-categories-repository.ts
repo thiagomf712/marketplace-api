@@ -7,4 +7,8 @@ export class InMemoryCategoriesRepository extends CategoriesRepository {
   async findMany(): Promise<Category[]> {
     return this.items
   }
+
+  async findById(id: string): Promise<Category | null> {
+    return this.items.find((category) => category.id.toString() === id) ?? null
+  }
 }

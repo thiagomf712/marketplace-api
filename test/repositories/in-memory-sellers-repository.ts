@@ -7,6 +7,10 @@ import { Seller } from '@/domain/marketplace/enterprise/entities/seller'
 export class InMemorySellersRepository implements SellersRepository {
   public items: Seller[] = []
 
+  async findById(id: string): Promise<Seller | null> {
+    return this.items.find((item) => item.id.toString() === id) ?? null
+  }
+
   async findByEmail(email: string): Promise<Seller | null> {
     const seller = this.items.find((item) => item.email === email)
 

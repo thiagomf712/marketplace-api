@@ -15,4 +15,14 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 
     return categories.map(PrismaCategoryMapper.toDomain)
   }
+
+  async findById(id: string): Promise<Category | null> {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    return category ? PrismaCategoryMapper.toDomain(category) : null
+  }
 }

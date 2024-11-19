@@ -23,6 +23,9 @@ model User {
 
   attachment Attachment @relation(fields: [avatarId], references: [id])
 
+  products             Product[]
+  productVisualization ProductVisualization[]
+
   @@map("users")
 }
 
@@ -30,7 +33,8 @@ model Attachment {
   id  String @id @default(uuid())
   url String
 
-  User User[]
+  users    User[]
+  products Product[]
 
   @@map("attachments")
 }
@@ -40,5 +44,47 @@ model Category {
   title String
   slug  String
 
+  products Product[]
+
   @@map("categories")
+}
+
+enum ProductStatus {
+  available
+  cancelled
+  sold
+}
+
+model Product {
+  id           String        @id @default(uuid())
+  title        String
+  description  String
+  status       ProductStatus
+  priceInCents Int           @map("price_in_cents")
+  categoryId   String        @map("category_id")
+  ownerId      String        @map("owner_id")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  soldAt DateTime? @map("sold_at")
+
+  category             Category               @relation(fields: [categoryId], references: [id])
+  owner                User                   @relation(fields: [ownerId], references: [id])
+  attachments          Attachment[]
+  productVisualization ProductVisualization[]
+
+  @@map("products")
+}
+
+model ProductVisualization {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id")
+  userId    String   @map("user_id")
+  viewedAt  DateTime @map("viewed_at")
+
+  product Product @relation(fields: [productId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@map("product_visualizations")
 }

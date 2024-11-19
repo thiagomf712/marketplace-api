@@ -49,9 +49,6 @@ export class ProductFactory {
         product,
         product.attachments.getItems(),
       ),
-      include: {
-        attachments: true,
-      },
     })
 
     return product

@@ -122,7 +122,7 @@ export class Product extends AggregateRoot<ProductProps> {
         categoryId: props.category.id,
         owner: props.owner ?? null,
         createdAt: props.createdAt ?? new Date(),
-        attachments: new ProductAttachmentList(),
+        attachments: props.attachments ?? new ProductAttachmentList(),
       },
       id,
     )

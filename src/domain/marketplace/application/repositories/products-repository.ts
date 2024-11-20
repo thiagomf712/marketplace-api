@@ -1,6 +1,16 @@
-import { Product } from '../../enterprise/entities/product'
+import { Product, ProductStatus } from '../../enterprise/entities/product'
+
+export interface FindManyProductsRecentParams {
+  search?: string
+  page: number
+  status?: ProductStatus
+}
 
 export abstract class ProductsRepository {
+  abstract findManyRecent(
+    params: FindManyProductsRecentParams,
+  ): Promise<Product[]>
+
   abstract findById(id: string): Promise<Product | null>
 
   abstract create(product: Product): Promise<void>

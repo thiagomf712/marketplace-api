@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
 import { CreateProductUseCase } from '@/domain/marketplace/application/use-cases/create-product'
 import { FetchCategoriesUseCase } from '@/domain/marketplace/application/use-cases/fetch-categories'
+import { FetchProductsRecentUseCase } from '@/domain/marketplace/application/use-cases/fetch-products-recents'
 import { GetProductByIdUseCase } from '@/domain/marketplace/application/use-cases/get-product-by-id'
 import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
 import { UpdateProductUseCase } from '@/domain/marketplace/application/use-cases/update-product'
@@ -16,6 +17,7 @@ import { AuthenticateController } from './controllers/authenticate.controller'
 import { CreateProductController } from './controllers/create-product.controller'
 import { CreateSellerController } from './controllers/create-seller.controller'
 import { FetchCategoriesController } from './controllers/fetch-categories.controller'
+import { FetchProductsRecentController } from './controllers/fetch-products-recent.controller'
 import { GetAttachmentByUrlController } from './controllers/get-attachment-by-url.controller'
 import { GetProductByIdController } from './controllers/get-product-by-id.controller'
 import { SignOutController } from './controllers/sign-out.controller'
@@ -34,6 +36,7 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     CreateProductController,
     UpdateProductController,
     GetProductByIdController,
+    FetchProductsRecentController,
   ],
   providers: [
     UploadAttachmentUseCase,
@@ -43,6 +46,7 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     CreateProductUseCase,
     UpdateProductUseCase,
     GetProductByIdUseCase,
+    FetchProductsRecentUseCase,
   ],
 })
 export class HttpModule {}

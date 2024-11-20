@@ -1,8 +1,34 @@
-import { ProductsRepository } from '@/domain/marketplace/application/repositories/products-repository'
+import {
+  FindManyProductsRecentParams,
+  ProductsRepository,
+} from '@/domain/marketplace/application/repositories/products-repository'
 import { Product } from '@/domain/marketplace/enterprise/entities/product'
 
 export class InMemoryProductsRepository implements ProductsRepository {
   public items: Product[] = []
+
+  async findManyRecent(
+    params: FindManyProductsRecentParams,
+  ): Promise<Product[]> {
+    return this.items
+      .filter((product) => {
+        let isValid = true
+
+        if (params.status) {
+          isValid &&= product.status === params.status
+        }
+
+        if (params.search) {
+          isValid &&=
+            product.description.includes(params.search) ||
+            product.title.includes(params.search)
+        }
+
+        return isValid
+      })
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice((params.page - 1) * 20, params.page * 20)
+  }
 
   async findById(id: string): Promise<Product | null> {
     return this.items.find((product) => product.id.toString() === id) ?? null

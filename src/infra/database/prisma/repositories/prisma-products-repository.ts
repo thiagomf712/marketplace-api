@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import {
+  FindManyProductsBySellerParams,
   FindManyProductsRecentParams,
   ProductsRepository,
 } from '@/domain/marketplace/application/repositories/products-repository'
@@ -46,6 +47,40 @@ export class PrismaProductsRepository implements ProductsRepository {
       },
       skip: (params.page - 1) * 20,
       take: 20,
+    })
+
+    return products.map(PrismaProductMapper.toDomain)
+  }
+
+  async findManyBySeller(
+    params: FindManyProductsBySellerParams,
+  ): Promise<Product[]> {
+    const products = await this.prisma.product.findMany({
+      where: {
+        ownerId: params.sellerId,
+        status: params.status,
+        OR: params.search
+          ? [
+              {
+                title: {
+                  contains: params.search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                description: {
+                  contains: params.search,
+                  mode: 'insensitive',
+                },
+              },
+            ]
+          : undefined,
+      },
+      include: {
+        attachments: true,
+        category: true,
+        owner: { include: { attachment: true } },
+      },
     })
 
     return products.map(PrismaProductMapper.toDomain)

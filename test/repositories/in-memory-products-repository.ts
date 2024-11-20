@@ -1,4 +1,5 @@
 import {
+  FindManyProductsBySellerParams,
   FindManyProductsRecentParams,
   ProductsRepository,
 } from '@/domain/marketplace/application/repositories/products-repository'
@@ -28,6 +29,28 @@ export class InMemoryProductsRepository implements ProductsRepository {
       })
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice((params.page - 1) * 20, params.page * 20)
+  }
+
+  async findManyBySeller(
+    params: FindManyProductsBySellerParams,
+  ): Promise<Product[]> {
+    return this.items.filter((product) => {
+      let isValid = true
+
+      isValid &&= product.ownerId.toString() === params.sellerId
+
+      if (params.status) {
+        isValid &&= product.status === params.status
+      }
+
+      if (params.search) {
+        isValid &&=
+          product.description.includes(params.search) ||
+          product.title.includes(params.search)
+      }
+
+      return isValid
+    })
   }
 
   async findById(id: string): Promise<Product | null> {

@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { AuthenticateSellerUseCase } from '@/domain/marketplace/application/use-cases/authenticate-seller'
 import { CreateProductUseCase } from '@/domain/marketplace/application/use-cases/create-product'
 import { FetchCategoriesUseCase } from '@/domain/marketplace/application/use-cases/fetch-categories'
+import { FetchProductsBySellerUseCase } from '@/domain/marketplace/application/use-cases/fetch-products-by-seller'
 import { FetchProductsRecentUseCase } from '@/domain/marketplace/application/use-cases/fetch-products-recents'
 import { GetProductByIdUseCase } from '@/domain/marketplace/application/use-cases/get-product-by-id'
 import { RegisterSellerUseCase } from '@/domain/marketplace/application/use-cases/register-seller'
@@ -17,6 +18,7 @@ import { AuthenticateController } from './controllers/authenticate.controller'
 import { CreateProductController } from './controllers/create-product.controller'
 import { CreateSellerController } from './controllers/create-seller.controller'
 import { FetchCategoriesController } from './controllers/fetch-categories.controller'
+import { FetchProductsBySellerController } from './controllers/fetch-products-by-seller.controller'
 import { FetchProductsRecentController } from './controllers/fetch-products-recent.controller'
 import { GetAttachmentByUrlController } from './controllers/get-attachment-by-url.controller'
 import { GetProductByIdController } from './controllers/get-product-by-id.controller'
@@ -35,8 +37,9 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     FetchCategoriesController,
     CreateProductController,
     UpdateProductController,
-    GetProductByIdController,
+    FetchProductsBySellerController,
     FetchProductsRecentController,
+    GetProductByIdController,
   ],
   providers: [
     UploadAttachmentUseCase,
@@ -45,8 +48,9 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     FetchCategoriesUseCase,
     CreateProductUseCase,
     UpdateProductUseCase,
-    GetProductByIdUseCase,
+    FetchProductsBySellerUseCase,
     FetchProductsRecentUseCase,
+    GetProductByIdUseCase,
   ],
 })
 export class HttpModule {}
